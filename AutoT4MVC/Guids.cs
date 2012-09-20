@@ -2,7 +2,7 @@
 // MUST match guids.h
 using System;
 
-namespace BennorMcCarthy.AutoT4MVC
+namespace AutoT4MVC
 {
     static class GuidList
     {
