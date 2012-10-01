@@ -73,7 +73,7 @@ namespace AutoT4MVC
                 if (projectItem.ProjectItems != null)
                 {
                     foreach (var subItem in FindProjectItems(name, projectItem.ProjectItems))
-                        yield return projectItem;
+                        yield return subItem;
                 }
                 if (projectItem.SubProject != null)
                 {
