@@ -1,0 +1,7 @@
+﻿Version 1.0.1
+=============
+Bug in iteration over project sub-items fixed by Kenneth Johnsen (http://github.com/kennethjohnsen).
+
+Version 1.0.0
+=============
+Initial version
