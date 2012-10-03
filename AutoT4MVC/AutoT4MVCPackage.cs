@@ -5,6 +5,7 @@ using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Runtime.InteropServices;
 
@@ -76,17 +77,18 @@ namespace AutoT4MVC
 
         private static bool IsMatch(ProjectItem projectItem, string[] triggerPaths)
         {
-            if (triggerPaths == null)
-				throw new ArgumentNullException("triggerPaths");
-
-            if (projectItem == null)
+            if (projectItem == null || triggerPaths == null)
                 return false;
 
             short fileCount = projectItem.FileCount;
             for (short i = 0; i < fileCount; i++)
             {
-                if(IsMatch(projectItem.FileNames[i], triggerPaths))
-                    return true;
+                try
+                {
+                    if (IsMatch(projectItem.FileNames[i], triggerPaths))
+                        return true;
+                }
+                catch (COMException) { }
             }
 
             return false;
