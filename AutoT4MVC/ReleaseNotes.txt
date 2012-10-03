@@ -1,4 +1,11 @@
-﻿Version 1.0.1
+﻿Version 1.1.0
+=============
+T4MVC templates are now run under the following conditions:
+* a project or solution containing the template is built
+* a file in ~/Controllers is saved (in the same project)
+* a file is added/removed/renamed in ~/Controllers, ~/Views, ~/Scripts or ~/Content (in the same project)
+
+Version 1.0.1
 =============
 Bug in iteration over project sub-items fixed by Kenneth Johnsen (http://github.com/kennethjohnsen).
 

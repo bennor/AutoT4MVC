@@ -1,9 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <PackageManifest Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011" xmlns:d="http://schemas.microsoft.com/developer/vsx-schema-design/2011">
   <Metadata>
-    <Identity Id="c676817c-46cc-47d3-b03c-8a05f499d4a5" Version="1.0.1" Language="en-US" Publisher="Bennor McCarthy" />
+    <Identity Id="c676817c-46cc-47d3-b03c-8a05f499d4a5" Version="1.1.0" Language="en-US" Publisher="Bennor McCarthy" />
     <DisplayName>AutoT4MVC</DisplayName>
-    <Description xml:space="preserve">A zero-configuration extension for Visual Studio 2012 which will automatically run your T4MVC templates at build time.</Description>
+    <Description xml:space="preserve">A zero-configuration extension for Visual Studio 2012 which will automatically run your T4MVC templates at build time, when you create/remove/save a file in a directory T4MVC cares about.</Description>
     <MoreInfo>https://github.com/bennor/AutoT4MVC</MoreInfo>
     <License>LICENCE.txt</License>
     <ReleaseNotes>ReleaseNotes.txt</ReleaseNotes>
