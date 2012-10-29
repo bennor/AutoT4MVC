@@ -1,9 +1,14 @@
-﻿Version 1.1.0
+﻿Version 1.1.1
+=============
+Added triggering on add/remove/rename of a file in any of the following folders (case-insensitive): "Assets", "CSS", "Images", "JS" or "Styles".
+Added triggering on save of "T4MVC.tt.settings.t4".
+
+Version 1.1.0
 =============
 T4MVC templates are now run under the following conditions:
 * a project or solution containing the template is built
-* a file in ~/Controllers is saved (in the same project)
-* a file is added/removed/renamed in ~/Controllers, ~/Views, ~/Scripts or ~/Content (in the same project)
+* a file in a "Controllers" folder (case-insensitive) is saved (in the same project)
+* a file is added/removed/renamed in any of the following folders (case-insensitive) "Controllers", "Views", "Scripts" or "Content" (in the same project)
 
 Version 1.0.1
 =============

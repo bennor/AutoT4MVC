@@ -6,6 +6,7 @@ using Microsoft.VisualStudio.Shell.Interop;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 
@@ -19,14 +20,20 @@ namespace AutoT4MVC
     {
         private static readonly string[] DocumentNameChangeTriggers = 
         {
+            @"\Assets\",
             @"\Content\",
             @"\Controllers\",
+            @"\CSS\",
+            @"\Images\",
+            @"\JS\",
             @"\Scripts\",
+            @"\Styles\",
             @"\Views\"
         };
         private static readonly string[] DocumentContentChangeTriggers = 
         {
-            @"\Controllers\"
+            @"\Controllers\",
+            @"\T4MVC.tt.settings.t4"
         };
 
         private DTE dte;
@@ -80,13 +87,25 @@ namespace AutoT4MVC
             if (projectItem == null || triggerPaths == null)
                 return false;
 
+            bool itemHasNoProject = projectItem.ContainingProject == null
+                || string.Equals(projectItem.ContainingProject.Name, "Miscellaneous Files", StringComparison.OrdinalIgnoreCase);
+            if(itemHasNoProject)
+                return false;
+
+            string projectFolderPath = Path.GetDirectoryName(projectItem.ContainingProject.FullName);
+
             short fileCount = projectItem.FileCount;
             for (short i = 0; i < fileCount; i++)
             {
                 try
                 {
-                    if (IsMatch(projectItem.FileNames[i], triggerPaths))
-                        return true;
+                    string fileName = projectItem.FileNames[i];
+                    if(fileName != null) 
+                    {
+                        fileName = fileName.Replace(projectFolderPath, "");
+                        if (IsMatch(fileName, triggerPaths))
+                            return true;
+                    }
                 }
                 catch (COMException) { }
             }
