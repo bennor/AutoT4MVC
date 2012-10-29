@@ -5,7 +5,7 @@ There used to be [a really sweet macro](http://stackoverflow.com/questions/23417
 T4MVC templates are run under the following conditions (all string comparisons are case-insensitive):
 
 * a project or solution containing the template is built
-* a file in "/Controllers/" is saved (in the same project)
+* a file in a "Controllers" folder is saved (in the same project)
 * the settings file "T4MVC.tt.settings.t4" is saved (in the same project)
 * a file is added/removed/renamed in a folder named  "Assets", "Content", "Controllers", "CSS", "Images", "JS", "Scripts", "Styles" or "Views" (in the same project)
 
