@@ -1,4 +1,9 @@
-﻿Version 1.1.1
+﻿Version 1.1.2
+=============
+Added triggering on save of "T4MVC.tt.settings.xml".
+
+
+Version 1.1.1
 =============
 Added triggering on add/remove/rename of a file in any of the following folders (case-insensitive): "Assets", "CSS", "Images", "JS" or "Styles".
 Added triggering on save of "T4MVC.tt.settings.t4".

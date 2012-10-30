@@ -33,7 +33,8 @@ namespace AutoT4MVC
         private static readonly string[] DocumentContentChangeTriggers = 
         {
             @"\Controllers\",
-            @"\T4MVC.tt.settings.t4"
+            @"\T4MVC.tt.settings.t4",
+            @"\T4MVC.tt.settings.xml"
         };
 
         private DTE dte;

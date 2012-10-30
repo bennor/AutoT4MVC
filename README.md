@@ -6,10 +6,10 @@ T4MVC templates are run under the following conditions (all string comparisons a
 
 * a project or solution containing the template is built
 * a file in a "Controllers" folder is saved (in the same project)
-* the settings file "T4MVC.tt.settings.t4" is saved (in the same project)
+* the settings file "T4MVC.tt.settings.xml" (or "T4MVC.tt.settings.t4") is saved (in the same project)
 * a file is added/removed/renamed in a folder named  "Assets", "Content", "Controllers", "CSS", "Images", "JS", "Scripts", "Styles" or "Views" (in the same project)
 
-Note: Drag/drop in the Solution Explorer will not trigger the templates to re-run, as the added/remove events are not fired.
+Note: Drag/drop in the Solution Explorer will not trigger the templates to re-run, as the added/removed events are not fired.
 
 [Chirpy](http://chirpy.codeplex.com/) and [AutoTT](https://github.com/MartinF/Dynamo.AutoTT) do the similar things, but Chirpy is overkill if all you want is your T4MVC templates built and I think AutoTT requires configuration. Also, neither of them appear to be available for VS 2012 yet.
 
