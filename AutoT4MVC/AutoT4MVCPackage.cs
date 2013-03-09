@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Reactive.Linq;
 using System.Runtime.InteropServices;
 
 namespace AutoT4MVC
@@ -18,35 +19,21 @@ namespace AutoT4MVC
     [ProvideAutoLoad(VSConstants.UICONTEXT.SolutionExists_string)]
     public sealed class AutoT4MVCPackage : Package
     {
-        private static readonly string[] DocumentNameChangeTriggers = 
-        {
-            @"\Assets\",
-            @"\Content\",
-            @"\Controllers\",
-            @"\CSS\",
-            @"\Images\",
-            @"\JS\",
-            @"\Scripts\",
-            @"\Styles\",
-            @"\Views\"
-        };
-        private static readonly string[] DocumentContentChangeTriggers = 
-        {
-            @"\Controllers\",
-            @"\T4MVC.tt.settings.t4",
-            @"\T4MVC.tt.settings.xml"
-        };
-
         private DTE dte;
         private BuildEvents buildEvents;
         private DocumentEvents documentEvents;
         private ProjectItemsEvents projectItemsEvents;
-        
+        private Controller controller;
+
         protected override void Initialize()
         {
             base.Initialize();
             
             dte = GetService(typeof(SDTE)) as DTE;
+            if (dte == null)
+                return;
+
+            controller = new Controller();
 
             buildEvents = dte.Events.BuildEvents;
             buildEvents.OnBuildBegin += OnBuildBegin;
@@ -55,97 +42,39 @@ namespace AutoT4MVC
             documentEvents.DocumentSaved += DocumentSaved;
 
             var events2 = dte.Events as Events2;
-            if (events2 != null)
-            {
-                projectItemsEvents = events2.ProjectItemsEvents;
-                projectItemsEvents.ItemAdded += ItemAdded;
-                projectItemsEvents.ItemRemoved += ItemRemoved;
-                projectItemsEvents.ItemRenamed += ItemRenamed;
-            }
-        }
-
-        private void RunTemplates(params Project[] projects)
-        {
-            if (projects == null)
+            if (events2 == null)
                 return;
 
-            var t4MvcTemplates = FindProjectItems("T4MVC.tt", projects).ToList();
-            foreach (var t4MvcTemplate in t4MvcTemplates)
-            {
-                if (!t4MvcTemplate.IsOpen)
-                    t4MvcTemplate.Open();
-                t4MvcTemplate.Save();
-            }
+            projectItemsEvents = events2.ProjectItemsEvents;
+            projectItemsEvents.ItemAdded += ItemAdded;
+            projectItemsEvents.ItemRemoved += ItemRemoved;
+            projectItemsEvents.ItemRenamed += ItemRenamed;
         }
 
-        private static bool IsMatch(string fileName, string[] triggerPaths)
+        private void DocumentSaved(Document document)
         {
-            return triggerPaths.Any(p => fileName.IndexOf(p, StringComparison.OrdinalIgnoreCase) > -1);
+           controller.HandleContentChange(document.ProjectItem);
         }
 
-        private static bool IsMatch(ProjectItem projectItem, string[] triggerPaths)
+        private void ItemRenamed(ProjectItem projectItem, string oldName)
         {
-            if (projectItem == null || triggerPaths == null)
-                return false;
-
-            bool itemHasNoProject = projectItem.ContainingProject == null
-                || string.Equals(projectItem.ContainingProject.Name, "Miscellaneous Files", StringComparison.OrdinalIgnoreCase);
-            if(itemHasNoProject)
-                return false;
-
-            string projectFolderPath = Path.GetDirectoryName(projectItem.ContainingProject.FullName);
-
-            short fileCount = projectItem.FileCount;
-            for (short i = 0; i < fileCount; i++)
-            {
-                try
-                {
-                    string fileName = projectItem.FileNames[i];
-                    if(fileName != null) 
-                    {
-                        fileName = fileName.Replace(projectFolderPath, "");
-                        if (IsMatch(fileName, triggerPaths))
-                            return true;
-                    }
-                }
-                catch (COMException) { }
-            }
-
-            return false;
+           controller.HandleNameChange(projectItem);
         }
 
-        private void DocumentSaved(Document Document)
+        private void ItemRemoved(ProjectItem projectItem)
         {
-            var projectItem = Document.ProjectItem;
-            if (projectItem == null)
-                return;
-
-            if (IsMatch(projectItem, DocumentContentChangeTriggers))
-                RunTemplates(projectItem.ContainingProject);
+            controller.HandleNameChange(projectItem);
         }
 
-        private void ItemRenamed(ProjectItem ProjectItem, string OldName)
+        private void ItemAdded(ProjectItem projectItem)
         {
-            if(IsMatch(ProjectItem, DocumentNameChangeTriggers))
-                RunTemplates(ProjectItem.ContainingProject);
+            controller.HandleNameChange(projectItem);
         }
 
-        private void ItemRemoved(ProjectItem ProjectItem)
-        {
-            if (IsMatch(ProjectItem, DocumentNameChangeTriggers))
-                RunTemplates(ProjectItem.ContainingProject);
-        }
-
-        private void ItemAdded(ProjectItem ProjectItem)
-        {
-            if (IsMatch(ProjectItem, DocumentNameChangeTriggers))
-                RunTemplates(ProjectItem.ContainingProject);
-        }
-
-        private void OnBuildBegin(vsBuildScope Scope, vsBuildAction Action)
+        private void OnBuildBegin(vsBuildScope scope, vsBuildAction action)
         {
             IEnumerable<Project> projects = null;
-            switch (Scope)
+            switch (scope)
             {
                 case vsBuildScope.vsBuildScopeSolution:
                     projects = dte.Solution.Projects.OfType<Project>();
@@ -157,39 +86,7 @@ namespace AutoT4MVC
                     return;
             }
 
-            RunTemplates(projects.ToArray());
-        }
-
-        private IEnumerable<ProjectItem> FindProjectItems(string name, IEnumerable<Project> projects)
-        {
-            if (projects == null)
-                projects = dte.Solution.Projects.OfType<Project>();
-
-            foreach (Project project in projects)
-            {
-                foreach (var projectItem in FindProjectItems(name, project.ProjectItems))
-                    yield return projectItem;
-            }
-        }
-
-        private static IEnumerable<ProjectItem> FindProjectItems(string name, ProjectItems projectItems)
-        {
-            foreach (ProjectItem projectItem in projectItems)
-            {
-                if (StringComparer.OrdinalIgnoreCase.Equals(projectItem.Name, name))
-                    yield return projectItem;
-
-                if (projectItem.ProjectItems != null)
-                {
-                    foreach (var subItem in FindProjectItems(name, projectItem.ProjectItems))
-                        yield return subItem;
-                }
-                if (projectItem.SubProject != null)
-                {
-                    foreach (var subItem in FindProjectItems(name, projectItem.SubProject.ProjectItems))
-                        yield return subItem;
-                }
-            }
+            controller.RunTemplates(projects);
         }
 
         protected override int QueryClose(out bool canClose)
@@ -214,6 +111,9 @@ namespace AutoT4MVC
                 projectItemsEvents.ItemRemoved -= ItemRemoved;
                 projectItemsEvents.ItemRenamed -= ItemRenamed;
             }
+            if(controller != null)
+                controller.Dispose();
+
             return result;
         }
     }

@@ -1,4 +1,8 @@
-﻿Version 1.1.2
+﻿Version 1.2.0
+=============
+Added throttling for multiple events within a short space of time (to avoid reprocessing template when adding/removing a whole directory of files, etc).
+
+Version 1.1.2
 =============
 Added triggering on save of "T4MVC.tt.settings.xml".
 
