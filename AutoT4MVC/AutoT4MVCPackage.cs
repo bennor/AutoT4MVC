@@ -73,13 +73,14 @@ namespace AutoT4MVC
 
         private void OnBuildBegin(vsBuildScope scope, vsBuildAction action)
         {
-            IEnumerable<Project> projects = null;
+            IEnumerable<Project> projects;
             switch (scope)
             {
                 case vsBuildScope.vsBuildScopeSolution:
                     projects = dte.Solution.Projects.OfType<Project>();
                     break;
                 case vsBuildScope.vsBuildScopeProject:
+                case vsBuildScope.vsBuildScopeBatch:
                     projects = ((object[])dte.ActiveSolutionProjects).OfType<Project>();
                     break;
                 default:

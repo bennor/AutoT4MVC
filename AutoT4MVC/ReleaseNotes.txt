@@ -1,6 +1,7 @@
 ﻿Version 1.2.0
 =============
 Added throttling for multiple events within a short space of time (to avoid reprocessing template when adding/removing a whole directory of files, etc).
+Now uses the "Run Custom Tool" command to avoid an unnecessary checkout of the template file.
 
 Version 1.1.2
 =============

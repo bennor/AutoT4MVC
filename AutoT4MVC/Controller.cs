@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using EnvDTE;
 using System.Reactive.Linq;
+using VSLangProj;
 
 namespace AutoT4MVC
 {
@@ -38,11 +39,11 @@ namespace AutoT4MVC
 
         public Controller()
         {
-            //projectSubscription = Observable.FromEventPattern<ProjectEventArgs>(e => Update += e, e => Update -= e)
-            //                                .Select(e => e.EventArgs.Project)
-            //                                .GroupBy(p => p)
-            //                                .SelectMany(g => g.Throttle(TimeSpan.FromSeconds(1)))
-            //                                .Subscribe(RunTemplate);
+            projectSubscription = Observable.FromEventPattern<ProjectEventArgs>(e => Update += e, e => Update -= e)
+                                            .Select(e => e.EventArgs.Project)
+                                            .GroupBy(p => p)
+                                            .SelectMany(g => g.Throttle(TimeSpan.FromSeconds(1)))
+                                            .Subscribe(RunTemplate);
         }
 
         private void TryTriggerUpdate(ProjectItem projectItem, IList<string> pathFragments)
@@ -69,12 +70,20 @@ namespace AutoT4MVC
             if (projects == null)
                 return;
 
-            var t4MvcTemplates = projects.Where(p => p != null).FindProjectItems("T4MVC.tt");
-            foreach (var t4MvcTemplate in t4MvcTemplates)
+            var templates = projects.Where(p => p != null).FindProjectItems("T4MVC.tt");
+            foreach (var template in templates)
             {
-                if (!t4MvcTemplate.IsOpen)
-                    t4MvcTemplate.Open();
-                t4MvcTemplate.Save();
+                var templateVsProjectItem = template.Object as VSProjectItem;
+                if (templateVsProjectItem != null)
+                {
+                    templateVsProjectItem.RunCustomTool();
+                }
+                else
+                {
+                    if (!template.IsOpen)
+                        template.Open();
+                    template.Save();
+                }
             }
         }
         public void RunTemplate(Project project)

@@ -59,7 +59,7 @@ namespace AutoT4MVC
                                            : null;
 
             short fileCount = projectItem.FileCount;
-            for (short i = 0; i < fileCount; i++)
+            for (short i = 1; i <= fileCount; i++)
             {
                 try
                 {
