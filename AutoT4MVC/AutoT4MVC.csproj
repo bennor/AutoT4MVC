@@ -160,6 +160,10 @@
     <Content Include="AutoT4MVC.dll.config">
       <IncludeInVSIX>true</IncludeInVSIX>
     </Content>
+    <Content Include="noun_project_2223.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>
@@ -179,7 +183,6 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <IncludeInVSIX>true</IncludeInVSIX>
     </Content>
-    <Content Include="Resources\Package.ico" />
   </ItemGroup>
   <PropertyGroup>
     <UseCodebase>true</UseCodebase>

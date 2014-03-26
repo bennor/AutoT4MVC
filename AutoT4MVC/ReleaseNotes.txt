@@ -1,4 +1,8 @@
-﻿Version 1.2.0
+﻿Version 1.3.0
+=============
+Added support for Visual Studio 2013.
+
+Version 1.2.0
 =============
 Added throttling for multiple events within a short space of time (to avoid reprocessing template when adding/removing a whole directory of files, etc).
 Now uses the "Run Custom Tool" command to avoid an unnecessary checkout of the template file.
@@ -27,3 +31,8 @@ Bug in iteration over project sub-items fixed by Kenneth Johnsen (http://github.
 Version 1.0.0
 =============
 Initial version
+
+
+Attribution
+===========
+Refresh icon (http://thenounproject.com/noun/refresh/#icon-No2223) designed by Joris Hoogendoorn (http://thenounproject.com/jorishoogendoorn) from The Noun Project.
