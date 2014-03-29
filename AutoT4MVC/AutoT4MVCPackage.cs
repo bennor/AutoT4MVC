@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.Design;
 using System.Linq;
 using System.Runtime.InteropServices;
 using EnvDTE;
@@ -15,6 +16,7 @@ namespace AutoT4MVC
     [Guid(GuidList.guidAutoT4MVCPkgString)]
     [ProvideAutoLoad(VSConstants.UICONTEXT.SolutionExists_string)]
     [ProvideOptionPage(typeof (Options), Options.CategoryName, Options.PageName, 1000, 1001, false)]
+    [ProvideMenuResource("Menus.ctmenu", 1)]
     public sealed class AutoT4MVCPackage : Package
     {
         private BuildEvents _buildEvents;
@@ -52,6 +54,16 @@ namespace AutoT4MVC
             _projectItemsEvents.ItemAdded += ItemAdded;
             _projectItemsEvents.ItemRemoved += ItemRemoved;
             _projectItemsEvents.ItemRenamed += ItemRenamed;
+
+            var menuCommandService = GetService(typeof(IMenuCommandService)) as OleMenuCommandService;
+            if (null != menuCommandService)
+            {
+                var showOptionsCommandId = new CommandID(GuidList.guidAutoT4MVCCmdSet,
+                    (int) PkgCmdIDList.cmdidShowOptions);
+                var showOptionsMenuCommand = new OleMenuCommand(ShowOptions, showOptionsCommandId);
+                menuCommandService.AddCommand(showOptionsMenuCommand);
+                showOptionsMenuCommand.BeforeQueryStatus += ShowOptionsMenuCommandOnBeforeQueryStatus;
+            }
         }
 
         private void DocumentSaved(Document document)
@@ -107,6 +119,34 @@ namespace AutoT4MVC
             }
 
             _controller.RunTemplates(projects);
+        }
+
+        private void ShowOptionsMenuCommandOnBeforeQueryStatus(object sender, EventArgs eventArgs)
+        {
+            var showOptionsMenuCommand = sender as OleMenuCommand;
+            if (showOptionsMenuCommand == null)
+                return;
+
+            var monitorSelection = (IVsMonitorSelection)GetGlobalService(typeof(SVsShellMonitorSelection));
+            IntPtr hierarchyPtr;
+            IntPtr selectionContainerPtr;
+            uint projectItemId;
+            IVsMultiItemSelect mis;
+            monitorSelection.GetCurrentSelection(out hierarchyPtr, out projectItemId, out mis, out selectionContainerPtr);
+
+            var hierarchy = Marshal.GetTypedObjectForIUnknown(hierarchyPtr, typeof(IVsHierarchy)) as IVsHierarchy;
+            if (hierarchy == null)
+                return;
+
+            object value;
+            hierarchy.GetProperty(projectItemId, (int)__VSHPROPID.VSHPROPID_Name, out value);
+
+            showOptionsMenuCommand.Visible = string.Equals(value as string, "T4MVC.tt", StringComparison.OrdinalIgnoreCase);
+        }
+
+        private void ShowOptions(object sender, EventArgs e)
+        {
+            ShowOptionPage(typeof(Options));
         }
 
         protected override int QueryClose(out bool canClose)

@@ -1,0 +1,44 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<CommandTable xmlns="http://schemas.microsoft.com/VisualStudio/2005-10-18/CommandTable" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+  <Extern href="Stdidcmd.h" />
+  <Extern href="Vsshlids.h" />
+
+  <Commands package="guidAutoT4MVCPkg">
+    
+    <Groups>
+      <Group guid="guidAutoT4MVCCmdSet" id="ShowOptionsGroup" priority="0x0600">
+        <Parent guid="guidSolutionExplorerMenu" id="menuidSolutionExplorerMenu" />
+      </Group>
+    </Groups>
+
+    <Buttons>
+      <Button guid="guidAutoT4MVCCmdSet" id="cmdidShowOptions" priority="0x0100" type="Button">
+        <Parent guid="guidAutoT4MVCCmdSet" id="ShowOptionsGroup" />
+        <CommandFlag>DynamicVisibility</CommandFlag>
+        <Strings>
+          <CommandName>cmdidShowOptions</CommandName>
+          <ButtonText>AutoT4MVC options...</ButtonText>
+        </Strings>
+      </Button>
+    </Buttons>
+    
+  </Commands>
+
+  <Symbols>
+
+    <!-- This is the package guid. -->
+    <GuidSymbol name="guidAutoT4MVCPkg" value="{c676817c-46cc-47d3-b03c-8a05f499d4a5}" />
+
+    <!-- This is the guid used to group the menu commands together -->
+    <GuidSymbol name="guidAutoT4MVCCmdSet" value="{3e7abe3a-4955-4c2f-aef7-4672394b69fd}">
+      <IDSymbol name="ShowOptionsGroup" value="0x1020" />
+      <IDSymbol name="cmdidShowOptions" value="0x0100" />     
+    </GuidSymbol>
+    
+    <GuidSymbol name="guidSolutionExplorerMenu" value="{d309f791-903f-11d0-9efc-00a0c911004f}">
+      <IDSymbol name="menuidSolutionExplorerMenu" value="1072" />
+    </GuidSymbol>
+  </Symbols>
+  
+</CommandTable>

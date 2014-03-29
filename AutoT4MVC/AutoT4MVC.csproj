@@ -159,6 +159,7 @@
     <Compile Include="Options.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="PkgCmdID.cs" />
     <Compile Include="ProjectEventArgs.cs" />
     <Compile Include="ProjectItemExtensions.cs" />
     <Compile Include="Resources.Designer.cs">
@@ -179,6 +180,7 @@
     <EmbeddedResource Include="VSPackage.resx">
       <MergeWithCTO>true</MergeWithCTO>
       <ManifestResourceName>VSPackage</ManifestResourceName>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
@@ -195,6 +197,12 @@
     <None Include="source.extension.vsixmanifest">
       <SubType>Designer</SubType>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <VSCTCompile Include="AutoT4MVC.vsct">
+      <ResourceName>Menus.ctmenu</ResourceName>
+      <SubType>Designer</SubType>
+    </VSCTCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="Key.snk" />

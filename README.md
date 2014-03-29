@@ -1,6 +1,6 @@
 # What's this for?
 
-There used to be [a really sweet macro](http://stackoverflow.com/questions/2341717/can-you-do-a-runcustomtool-with-envdte-as-a-pre-build-event) for Visual Studio that would automatically run [T4MVC](http://t4mvc.codeplex.com) templates on build. Unfortunately, macro support has been removed from Visual Studio 2012+, so this is an extension that will do the same thing (and more).
+There used to be [a really sweet macro](http://stackoverflow.com/questions/2341717/can-you-do-a-runcustomtool-with-envdte-as-a-pre-build-event) for Visual Studio that would automatically run [T4MVC](http://t4mvc.codeplex.com) templates on build. Unfortunately, macro support has been removed from Visual Studio 2012/2013, so this is an extension that will do the same thing (and more).
 
 T4MVC templates are run under the following conditions (all string comparisons are case-insensitive):
 

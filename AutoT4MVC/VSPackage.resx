@@ -121,6 +121,6 @@
     <value>AutoT4MVC</value>
   </data>
   <data name="112" xml:space="preserve">
-    <value>A zero-configuration extension for Visual Studio 2012 which will automatically run your T4MVC templates at build time and when you create/remove/rename/save a file that T4MVC cares about.</value>
+    <value>An extension for Visual Studio 2012/2013 which will automatically run your T4MVC templates at build time and when you create/remove/rename/save a file that T4MVC cares about.</value>
   </data>
 </root>
