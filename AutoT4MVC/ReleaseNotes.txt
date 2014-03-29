@@ -1,4 +1,8 @@
-﻿Version 1.3.0
+﻿Version 1.4.0
+=============
+Added an options dialog which allows opting out of running at save or build time.
+
+Version 1.3.0
 =============
 Added support for Visual Studio 2013.
 

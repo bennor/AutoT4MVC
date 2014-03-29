@@ -35,11 +35,11 @@ namespace AutoT4MVC
 
         private event EventHandler<ProjectEventArgs> Update;
 
-        private IDisposable projectSubscription;
+        private IDisposable _projectSubscription;
 
         public Controller()
         {
-            projectSubscription = Observable.FromEventPattern<ProjectEventArgs>(e => Update += e, e => Update -= e)
+            _projectSubscription = Observable.FromEventPattern<ProjectEventArgs>(e => Update += e, e => Update -= e)
                                             .Select(e => e.EventArgs.Project)
                                             .GroupBy(p => p)
                                             .SelectMany(g => g.Throttle(TimeSpan.FromSeconds(1)))
@@ -96,10 +96,10 @@ namespace AutoT4MVC
 
         public void Dispose()
         {
-            if (projectSubscription != null)
+            if (_projectSubscription != null)
             {
-                projectSubscription.Dispose();
-                projectSubscription = null;
+                _projectSubscription.Dispose();
+                _projectSubscription = null;
             }
         }
     }

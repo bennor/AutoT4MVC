@@ -13,4 +13,4 @@ Note: Drag/drop in the Solution Explorer will not trigger the templates to re-ru
 
 [Chirpy](http://chirpy.codeplex.com/) and [AutoTT](https://github.com/MartinF/Dynamo.AutoTT) do similar things, but Chirpy is overkill if all you want is your T4MVC templates built and I think AutoTT requires configuration.
 
-Just build and install the template using the VSIX file, [grab it from the Visual Studio gallery](http://visualstudiogallery.msdn.microsoft.com/8d820b76-9fc4-429f-a95f-e68ed7d3111a) or **do it the easy way** and use the 'Extension & Updates' manager in Visual Studio 2012.
+Just build and install the template using the VSIX file, [grab it from the Visual Studio gallery](http://visualstudiogallery.msdn.microsoft.com/8d820b76-9fc4-429f-a95f-e68ed7d3111a) or **do it the easy way** and use the 'Extension & Updates' manager in Visual Studio 2012/2013.
