@@ -170,6 +170,8 @@
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="AutoT4MVCPackage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="T4MVCSettings.cs" />
+    <Compile Include="T4MVCSettingsCache.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources.resx">

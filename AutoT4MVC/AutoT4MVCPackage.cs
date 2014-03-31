@@ -55,6 +55,10 @@ namespace AutoT4MVC
             _projectItemsEvents.ItemRemoved += ItemRemoved;
             _projectItemsEvents.ItemRenamed += ItemRenamed;
 
+            var solutionEvents = _dte.Events.SolutionEvents;
+            solutionEvents.BeforeClosing += SolutionClosing;
+            solutionEvents.ProjectRemoved += ProjectRemoved;
+
             var menuCommandService = GetService(typeof(IMenuCommandService)) as OleMenuCommandService;
             if (null != menuCommandService)
             {
@@ -63,6 +67,19 @@ namespace AutoT4MVC
                 var showOptionsMenuCommand = new OleMenuCommand(ShowOptions, showOptionsCommandId);
                 menuCommandService.AddCommand(showOptionsMenuCommand);
                 showOptionsMenuCommand.BeforeQueryStatus += ShowOptionsMenuCommandOnBeforeQueryStatus;
+            }
+        }
+
+        private void ProjectRemoved(Project Project)
+        {
+            _controller.HandleProjectUnload(Project);
+        }
+
+        private void SolutionClosing()
+        {
+            foreach (Project project in _dte.Solution.Projects)
+            {
+                _controller.HandleProjectUnload(project);
             }
         }
 

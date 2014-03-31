@@ -11,6 +11,11 @@ namespace AutoT4MVC
 {
     public static class ProjectItemExtensions
     {
+        public static IEnumerable<ProjectItem> FindProjectItems(this Project project, string name)
+        {
+            return project.ProjectItems.FindProjectItems(name);
+        }
+
         public static IEnumerable<ProjectItem> FindProjectItems(this IEnumerable<Project> projects, string name)
         {
             return projects.SelectMany(project => project.ProjectItems.FindProjectItems(name));
@@ -54,30 +59,37 @@ namespace AutoT4MVC
             if (pathFragments == null)
                 return false;
 
-            string projectFolderPath = projectItem.HasProject()
-                                           ? Path.GetDirectoryName(projectItem.ContainingProject.FullName)
-                                           : null;
+            var fileNames = projectItem.GetFileNames();
 
-            short fileCount = projectItem.FileCount;
-            for (short i = 1; i <= fileCount; i++)
+            foreach (var fileName in fileNames)
             {
-                try
-                {
-                    string fileName = projectItem.FileNames[i];
-                    if (fileName == null)
-                        continue;
-
-                    if(projectFolderPath != null)
-                        fileName = fileName.Replace(projectFolderPath, "");
-
-                    bool isMatch = pathFragments.Any(p => fileName.IndexOf(p, StringComparison.OrdinalIgnoreCase) > -1);
-                    if (isMatch)
-                        return true;
-                }
-                catch (COMException) { /* Sometimes reading the a filename at a valid index throws and there's nothing we can do about it. */ }
+                bool isMatch = pathFragments.Any(p => fileName.IndexOf(p, StringComparison.OrdinalIgnoreCase) > -1);
+                if (isMatch)
+                    return true;
             }
 
             return false;
+        }
+
+        public static IEnumerable<string> GetFileNames(this ProjectItem item)
+        {
+            var projectFolderPath = item.HasProject()
+                                            ? Path.GetDirectoryName(item.ContainingProject.FullName)
+                                            : null;
+
+            return Enumerable.Range(0, item.FileCount).Select(i =>
+            {
+                try
+                {
+                    string filename = item.FileNames[(short)i];
+
+                    if (projectFolderPath != null)
+                        filename = filename.Replace(projectFolderPath, "");
+
+                    return filename;
+                }
+                catch (COMException) { return null; /* Ignore invalid exceptions */ }
+            }).Where(f => !string.IsNullOrWhiteSpace(f));
         }
     }
 }
