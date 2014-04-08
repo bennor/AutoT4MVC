@@ -59,16 +59,10 @@ namespace AutoT4MVC
             if (pathFragments == null)
                 return false;
 
-            var fileNames = projectItem.GetFileNames();
-
-            foreach (var fileName in fileNames)
-            {
-                bool isMatch = pathFragments.Any(p => fileName.IndexOf(p, StringComparison.OrdinalIgnoreCase) > -1);
-                if (isMatch)
-                    return true;
-            }
-
-            return false;
+            return projectItem.GetFileNames()
+                .Any(fileName =>
+                    pathFragments.Any(p =>
+                        fileName.IndexOf(p, StringComparison.OrdinalIgnoreCase) > -1));
         }
 
         public static IEnumerable<string> GetFileNames(this ProjectItem item)
@@ -81,12 +75,12 @@ namespace AutoT4MVC
             {
                 try
                 {
-                    string filename = item.FileNames[(short)i];
+                    string fileName = item.FileNames[(short)i];
 
                     if (projectFolderPath != null)
-                        filename = filename.Replace(projectFolderPath, "");
+                        fileName = fileName.Replace(projectFolderPath, "");
 
-                    return filename;
+                    return fileName;
                 }
                 catch (COMException) { return null; /* Ignore invalid exceptions */ }
             }).Where(f => !string.IsNullOrWhiteSpace(f));

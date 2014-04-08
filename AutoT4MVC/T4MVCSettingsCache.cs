@@ -21,16 +21,16 @@ namespace AutoT4MVC
                 return settings;
 
             // Building Settings
-            settings = T4MVCSettings.Build(project);
+            settings = T4MVCSettingsBuilder.Build(project);
 
             // Cache
             _projectT4MVCSettings.TryAdd(project, settings);
 
             return settings;
         }
-        public T4MVCSettings GetSettings(Project project, bool ForceReload)
+        public T4MVCSettings GetSettings(Project project, bool forceReload)
         {
-            if (ForceReload)
+            if (forceReload)
                 InvalidateSettings(project);
 
             return GetSettings(project);
@@ -43,9 +43,9 @@ namespace AutoT4MVC
             else
                 return null;
         }
-        public T4MVCSettings GetSettings(ProjectItem projectItem, bool ForceReload)
+        public T4MVCSettings GetSettings(ProjectItem projectItem, bool forceReload)
         {
-            if (ForceReload)
+            if (forceReload)
                 InvalidateSettings(projectItem.ContainingProject);
 
             return GetSettings(projectItem);
