@@ -11,6 +11,11 @@ namespace AutoT4MVC
 {
     public static class ProjectItemExtensions
     {
+        public static IEnumerable<ProjectItem> FindProjectItems(this Project project, string name)
+        {
+            return project.ProjectItems.FindProjectItems(name);
+        }
+
         public static IEnumerable<ProjectItem> FindProjectItems(this IEnumerable<Project> projects, string name)
         {
             return projects.SelectMany(project => project.ProjectItems.FindProjectItems(name));
@@ -54,30 +59,31 @@ namespace AutoT4MVC
             if (pathFragments == null)
                 return false;
 
-            string projectFolderPath = projectItem.HasProject()
-                                           ? Path.GetDirectoryName(projectItem.ContainingProject.FullName)
-                                           : null;
+            return projectItem.GetFileNames()
+                .Any(fileName =>
+                    pathFragments.Any(p =>
+                        fileName.IndexOf(p, StringComparison.OrdinalIgnoreCase) > -1));
+        }
 
-            short fileCount = projectItem.FileCount;
-            for (short i = 1; i <= fileCount; i++)
+        public static IEnumerable<string> GetFileNames(this ProjectItem item)
+        {
+            var projectFolderPath = item.HasProject()
+                                            ? Path.GetDirectoryName(item.ContainingProject.FullName)
+                                            : null;
+
+            return Enumerable.Range(0, item.FileCount).Select(i =>
             {
                 try
                 {
-                    string fileName = projectItem.FileNames[i];
-                    if (fileName == null)
-                        continue;
+                    string fileName = item.FileNames[(short)i];
 
-                    if(projectFolderPath != null)
+                    if (projectFolderPath != null)
                         fileName = fileName.Replace(projectFolderPath, "");
 
-                    bool isMatch = pathFragments.Any(p => fileName.IndexOf(p, StringComparison.OrdinalIgnoreCase) > -1);
-                    if (isMatch)
-                        return true;
+                    return fileName;
                 }
-                catch (COMException) { /* Sometimes reading the a filename at a valid index throws and there's nothing we can do about it. */ }
-            }
-
-            return false;
+                catch (COMException) { return null; /* Ignore invalid exceptions */ }
+            }).Where(f => !string.IsNullOrWhiteSpace(f));
         }
     }
 }

@@ -24,6 +24,7 @@ namespace AutoT4MVC
         private DocumentEvents _documentEvents;
         private DTE _dte;
         private ProjectItemsEvents _projectItemsEvents;
+        private SolutionEvents _solutionEvents;
 
         private Options Options
         {
@@ -55,6 +56,9 @@ namespace AutoT4MVC
             _projectItemsEvents.ItemRemoved += ItemRemoved;
             _projectItemsEvents.ItemRenamed += ItemRenamed;
 
+            _solutionEvents = _dte.Events.SolutionEvents;
+            _solutionEvents.ProjectRemoved += ProjectRemoved;
+
             var menuCommandService = GetService(typeof(IMenuCommandService)) as OleMenuCommandService;
             if (null != menuCommandService)
             {
@@ -64,6 +68,11 @@ namespace AutoT4MVC
                 menuCommandService.AddCommand(showOptionsMenuCommand);
                 showOptionsMenuCommand.BeforeQueryStatus += ShowOptionsMenuCommandOnBeforeQueryStatus;
             }
+        }
+
+        private void ProjectRemoved(Project Project)
+        {
+            _controller.HandleProjectUnload(Project);
         }
 
         private void DocumentSaved(Document document)
@@ -155,6 +164,11 @@ namespace AutoT4MVC
             if (!canClose)
                 return result;
 
+            if (_solutionEvents != null)
+            {
+                _solutionEvents.ProjectRemoved -= ProjectRemoved;
+                _solutionEvents = null;
+            }
             if (_buildEvents != null)
             {
                 _buildEvents.OnBuildBegin -= OnBuildBegin;

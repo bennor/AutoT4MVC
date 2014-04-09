@@ -13,32 +13,15 @@ namespace AutoT4MVC
 {
     public sealed class Controller : IDisposable
     {
-        private static readonly string[] NameChangePathFragments = 
-        {
-            @"\Assets\",
-            @"\Content\",
-            @"\Controllers\",
-            @"\CSS\",
-            @"\Images\",
-            @"\JS\",
-            @"\Scripts\",
-            @"\Styles\",
-            @"\Views\"
-        };
-
-        private static readonly string[] ContentChangePathFragments = 
-        {
-            @"\Controllers\",
-            @"\T4MVC.tt.settings.t4",
-            @"\T4MVC.tt.settings.xml"
-        };
-
         private event EventHandler<ProjectEventArgs> Update;
 
         private IDisposable _projectSubscription;
+        private T4MVCSettingsCache _settingsCache;
 
         public Controller()
         {
+            _settingsCache = new T4MVCSettingsCache();
+
             _projectSubscription = Observable.FromEventPattern<ProjectEventArgs>(e => Update += e, e => Update -= e)
                                             .Select(e => e.EventArgs.Project)
                                             .GroupBy(p => p)
@@ -46,23 +29,35 @@ namespace AutoT4MVC
                                             .Subscribe(RunTemplate);
         }
 
-        private void TryTriggerUpdate(ProjectItem projectItem, IList<string> pathFragments)
-        {
-            if (Update == null || projectItem == null)
-                return;
-
-            if(projectItem.HasProject() && projectItem.MatchesAnyPathFragment(pathFragments))
-                Update(this, new ProjectEventArgs(projectItem.ContainingProject));
-        }
-
         public void HandleNameChange(ProjectItem item)
         {
-            TryTriggerUpdate(item, NameChangePathFragments);
+            var reloadSettings = T4MVCSettings.RequiresCacheInvalidation(item);
+            
+            var settings = _settingsCache.GetSettings(item, reloadSettings);
+
+            if (settings == null)
+                return;
+
+            if (settings.TriggerOnNameChange(item))
+                Update(this, new ProjectEventArgs(item.ContainingProject));
         }
 
         public void HandleContentChange(ProjectItem item)
         {
-            TryTriggerUpdate(item, ContentChangePathFragments);
+            var reloadSettings = T4MVCSettings.RequiresCacheInvalidation(item);
+
+            var settings = _settingsCache.GetSettings(item, reloadSettings);
+
+            if (settings == null)
+                return;
+
+            if (settings.TriggerOnContentChange(item))
+                Update(this, new ProjectEventArgs(item.ContainingProject));
+        }
+
+        public void HandleProjectUnload(Project project)
+        {
+            _settingsCache.InvalidateSettings(project);
         }
         
         public void RunTemplates(IEnumerable<Project> projects)
