@@ -70,9 +70,9 @@ namespace AutoT4MVC
             }
         }
 
-        private void ProjectRemoved(Project Project)
+        private void ProjectRemoved(Project project)
         {
-            _controller.HandleProjectUnload(Project);
+            _controller.HandleProjectUnload(project);
         }
 
         private void DocumentSaved(Document document)

@@ -5,7 +5,7 @@ namespace AutoT4MVC
 {
     public class T4MVCSettingsCache
     {
-        private ConcurrentDictionary<Project, T4MVCSettings> _projectT4MVCSettings;
+        private readonly ConcurrentDictionary<Project, T4MVCSettings> _projectT4MVCSettings;
 
         public T4MVCSettingsCache()
         {

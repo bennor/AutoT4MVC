@@ -16,7 +16,7 @@ namespace AutoT4MVC
         private event EventHandler<ProjectEventArgs> Update;
 
         private IDisposable _projectSubscription;
-        private T4MVCSettingsCache _settingsCache;
+        private readonly T4MVCSettingsCache _settingsCache;
 
         public Controller()
         {

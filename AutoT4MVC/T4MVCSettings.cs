@@ -7,7 +7,7 @@ namespace AutoT4MVC
 {
     public class T4MVCSettings
     {
-        private static readonly string[] settingFilenames =
+        private static readonly string[] SettingsFileNames =
         {
             @"\T4MVC.tt.settings.xml",
             @"\T4MVC.tt.settings.t4"
@@ -63,7 +63,7 @@ namespace AutoT4MVC
         private static bool IsSettingsFile(ProjectItem item)
         {
             return item.GetFileNames()
-                .Any(fileName => settingFilenames
+                .Any(fileName => SettingsFileNames
                     .Any(settingFilename => fileName.EndsWith(settingFilename, StringComparison.InvariantCultureIgnoreCase)));
         }
 

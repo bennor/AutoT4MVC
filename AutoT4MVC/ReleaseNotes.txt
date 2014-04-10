@@ -1,4 +1,8 @@
-﻿Version 1.4.0
+﻿Version 1.5.0
+=============
+Now uses T4MVCSettings.xml to determine which folders/files to monitor for changes, thanks to Gary Sharp (https://github.com/garysharp).
+
+Version 1.4.0
 =============
 Added an options dialog which allows opting out of running at save or build time (can be accessed via right-click of T4MVC.tt file).
 
