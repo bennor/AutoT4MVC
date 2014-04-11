@@ -6,7 +6,7 @@
     <Description xml:space="preserve">An extension for Visual Studio which automatically runs your T4MVC templates at build time and when you create/remove/rename/save a file that T4MVC cares about.</Description>
     <MoreInfo>https://github.com/bennor/AutoT4MVC</MoreInfo>
     <License>LICENCE.txt</License>
-    <ReleaseNotes>ReleaseNotes.txt</ReleaseNotes>
+    <ReleaseNotes>https://github.com/bennor/AutoT4MVC/releases</ReleaseNotes>
     <Icon>noun_project_2223.png</Icon>
     <Tags>T4MVC</Tags>
   </Metadata>
