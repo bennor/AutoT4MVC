@@ -1,10 +1,10 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <PackageManifest Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011" xmlns:d="http://schemas.microsoft.com/developer/vsx-schema-design/2011">
   <Metadata>
-    <Identity Id="c676817c-46cc-47d3-b03c-8a05f499d4a5" Version="1.5.0" Language="en-US" Publisher="Bennor McCarthy" />
+    <Identity Id="c676817c-46cc-47d3-b03c-8a05f499d4a5" Version="1.5.1" Language="en-US" Publisher="Bennor McCarthy" />
     <DisplayName>AutoT4MVC</DisplayName>
     <Description xml:space="preserve">An extension for Visual Studio which automatically runs your T4MVC templates at build time and when you create/remove/rename/save a file that T4MVC cares about.</Description>
-    <MoreInfo>http://bennor.github.io/AutoT4MVC</MoreInfo>
+    <MoreInfo>http://bennor.github.io/AutoT4MVC/</MoreInfo>
     <License>LICENCE.txt</License>
     <ReleaseNotes>https://github.com/bennor/AutoT4MVC/releases</ReleaseNotes>
     <Icon>noun_project_2223.png</Icon>
