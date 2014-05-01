@@ -483,3 +483,7 @@ footer a:hover {
 header h1 { white-space: nowrap; }
 header svg { position: relative; top: 0.15em; height: 1em; left: -0.15em;  }
 header svg polygon { fill: #fff; }
+
+#releases>ul, #releases>ul>li { list-style:none; margin:0; padding:0; }
+#releases em { font-style:italic; }
+#releases strong { font-weight:700; }
