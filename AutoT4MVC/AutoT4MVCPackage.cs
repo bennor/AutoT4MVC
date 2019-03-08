@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.ComponentModel.Design;
 using System.Linq;
 using System.Runtime.InteropServices;
+using System.Threading;
+using System.Threading.Tasks;
 using EnvDTE;
 using EnvDTE80;
 using Microsoft.VisualStudio;
@@ -17,7 +19,11 @@ namespace AutoT4MVC
     [ProvideAutoLoad(VSConstants.UICONTEXT.SolutionExists_string)]
     [ProvideOptionPage(typeof (Options), Options.CategoryName, Options.PageName, 1000, 1001, false)]
     [ProvideMenuResource("Menus.ctmenu", 1)]
+#if VS2015
+    public sealed class AutoT4MVCPackage : AsyncPackage
+#else
     public sealed class AutoT4MVCPackage : Package
+#endif
     {
         private BuildEvents _buildEvents;
         private Controller _controller;
@@ -31,8 +37,14 @@ namespace AutoT4MVC
             get { return (Options)GetDialogPage(typeof (Options)); }
         }
 
+#if VS2015
+        protected override async System.Threading.Tasks.Task InitializeAsync(CancellationToken cancellationToken, IProgress<ServiceProgressData> progress)
+        {
+            await JoinableTaskFactory.SwitchToMainThreadAsync();
+#else
         protected override void Initialize()
         {
+#endif
             base.Initialize();
 
             _dte = GetService(typeof (SDTE)) as DTE;
